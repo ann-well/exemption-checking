@@ -1,1 +1,2 @@
-# exemption-checker
+# first-repo
+First repository - testing
