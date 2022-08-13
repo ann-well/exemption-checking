@@ -9,17 +9,22 @@ import time
 import openpyxl
 from openpyxl.styles import PatternFill
 
+# Create window for simple GUI
 window = tk.Tk()
 info = tk.Text(fg="white", bg="black", width=60, height=10)
 info.pack()
 
+# Open daily report file
 wb = openpyxl.load_workbook('Expired Exemption with Email.xlsx')
 sheet = wb['Page1_1']
 
+# Determine the output file name from the date of the report
 reportDate = sheet.cell(row=sheet.max_row, column =1).value
 fileName = str(reportDate.day).zfill(2) + str(reportDate.month).zfill(2) + str(reportDate.year)
 
+# Function to run from tk inter window
 def addInput():
+    # Extract the data from file
     day = []
     for i in range(3, sheet.max_row):
         day.append(sheet.cell(row= i, column= 1).value)   
@@ -41,17 +46,21 @@ def addInput():
     siebel = []
     for i in range(3, sheet.max_row):
         siebel.append(sheet.cell(row= i, column= 7).value)
-        
+
+    # Add column for output dates
     sheet.insert_cols(8)
     sheet.column_dimensions['H'].width = 30
 
+    # Create pattern fills
     fillRed = PatternFill(patternType='solid', fgColor='FFC7CE')
     fillGreen = PatternFill(patternType='solid', fgColor='C6EFCE')
 
+    # Open NHS site
     browser = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()))
     browser.get("https://services.nhsbsa.nhs.uk/check-my-nhs-exemption/start")
 
-    for i in range(len(day)):
+    for i in range(len(day)):  # Loop for the number of patients in report
+        # Find and populate form elements with data from report
         try:
             first = browser.find_element('id', 'next-button')
             first.submit()
@@ -80,21 +89,23 @@ def addInput():
                 codeWeb.send_keys(code[i])
                 codeWeb.submit()
                 time.sleep(0.5)
-            except:
+            except:  # No postcode error handling
                 browser.get("https://services.nhsbsa.nhs.uk/check-my-nhs-exemption/start")
                 sheet.cell(row=i+3, column =8).value = 'No postcode'
                 for y in range(1, 17):
                     sheet.cell(row=i+3, column=y).fill = fillRed
                 continue
-        except:
+        except:  # Merged/duplicate cells error handling
             if sheet.cell(row=i+2, column=y).fill == fillRed:
                 for y in range(1, 17):
                     sheet.cell(row=i+3, column=y).fill = fillRed
             browser.get("https://services.nhsbsa.nhs.uk/check-my-nhs-exemption/start")
             continue
 
+        # Result of submitting the form
         result = browser.find_element(By.CSS_SELECTOR, '.nhsuk-heading-xl').text
 
+        # NHS exemption present
         if result == 'You currently have an NHS exemption':
             exemptionDate = browser.find_element(By.CSS_SELECTOR,'.exemption-done-panel > h2:nth-child(2)').text
             empty, expireText, date = exemptionDate.partition('Expires on ')
@@ -103,21 +114,26 @@ def addInput():
             for y in range(1, 17):
                 sheet.cell(row=i+3, column=y).fill = fillGreen
 
+        # Over 60 years old
         elif result == 'You get help with health costs':
             sheet.cell(row=i+3, column =8).value = '60 years old'
             for y in range(1, 17):
                 sheet.cell(row=i+3, column=y).fill = fillGreen
 
+        # No information about the patient
         elif result == '''We couldn't match you to our records''':
             for y in range(1, 17):
                 sheet.cell(row=i+3, column=y).fill = fillRed
-            
+
+        # Get back to main page
         end = browser.find_element(By.CSS_SELECTOR, '.nhsuk-action-link__text')
         end.click()
         time.sleep(1)
 
+    # Save created file
     wb.save(fileName + '.xlsx')
-    
+
+# Start the function by user input
 addButton = tk.Button(window,
 text = "START", 
 command = addInput)
