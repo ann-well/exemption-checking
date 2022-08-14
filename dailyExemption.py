@@ -9,6 +9,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import openpyxl
 from openpyxl.styles import PatternFill
+import send2trash
 
 # Create window for simple GUI
 window = tk.Tk()
@@ -139,6 +140,9 @@ def checkExemption():
 
     # Save created file
     wb.save(fileName + '.xlsx')
+
+    # Delete input file
+    send2trash.send2trash('Expired Exemption with Email.xlsx')
 
 # Start the function by user input
 addButton = tk.Button(window,
