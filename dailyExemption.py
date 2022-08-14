@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import datetime
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
@@ -11,8 +12,14 @@ from openpyxl.styles import PatternFill
 
 # Create window for simple GUI
 window = tk.Tk()
-info = tk.Text(fg="white", bg="black", width=60, height=10)
-info.pack()
+window.title('Exemption reason checker')
+photo = tk.PhotoImage(file='exemptionLogo.png')
+image_label = ttk.Label(
+    window,
+    image=photo,
+    padding=5
+)
+image_label.pack()
 
 # Open daily report file
 wb = openpyxl.load_workbook('Expired Exemption with Email.xlsx')
@@ -23,7 +30,7 @@ reportDate = sheet.cell(row=sheet.max_row, column =1).value
 fileName = str(reportDate.day).zfill(2) + str(reportDate.month).zfill(2) + str(reportDate.year)
 
 # Function to run from tk inter window
-def addInput():
+def checkExemption():
     # Extract the data from file
     day = []
     for i in range(3, sheet.max_row):
@@ -136,7 +143,7 @@ def addInput():
 # Start the function by user input
 addButton = tk.Button(window,
 text = "START", 
-command = addInput)
+command = checkExemption)
 addButton.pack()
 
 window.mainloop()
