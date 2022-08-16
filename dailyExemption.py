@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-import datetime
+import datetime, os, sys
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
@@ -12,10 +12,19 @@ from openpyxl.styles import PatternFill
 import send2trash
 from tkinter import messagebox
 
+def resource_path(relative_path):
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 # Create window for simple GUI
 window = tk.Tk()
 window.title('Exemption reason checker')
-photo = tk.PhotoImage(file='exemptionLogo.png')
+photo = tk.PhotoImage(file=resource_path('exemptionLogo.png'))
 image_label = ttk.Label(
     window,
     image=photo,
