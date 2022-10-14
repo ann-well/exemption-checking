@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3b64cb4-37f6-42c7-8543-2762b10a64ad" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/dailyExemption.py" beforeDir="false" afterPath="$PROJECT_DIR$/dailyExemption.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ikona.ico" beforeDir="false" afterPath="$PROJECT_DIR$/ikona.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
