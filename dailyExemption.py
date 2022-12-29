@@ -123,7 +123,7 @@ def checkExemption():
                     sheet.cell(row=i + 3, column=y).fill = fillRed
             browser.get("https://services.nhsbsa.nhs.uk/check-my-nhs-exemption/start")
             continue
-
+        
         # Result of submitting the form
         result = browser.find_element(By.CSS_SELECTOR, '.nhsuk-heading-xl').text  # webbrowser result
 
